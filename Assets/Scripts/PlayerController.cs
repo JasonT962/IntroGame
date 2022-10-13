@@ -12,11 +12,19 @@ public class PlayerController : MonoBehaviour {
     private int numPickups = 3;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI winText;
+    public TextMeshProUGUI playerpos;
+    public TextMeshProUGUI playervel;
+    private Vector3 lastpos;
+    private float velocity;
 
     void Start() {
         count = 0;
         winText.text = "";
         SetCountText();
+        playerpos.text = "";
+        playervel.text = "";
+        velocity = 0;
+        lastpos = transform.position;
     }
 
     void OnMove ( InputValue value ) {
@@ -27,6 +35,12 @@ public class PlayerController : MonoBehaviour {
         Vector3 movement = new Vector3 ( moveValue .x, 0.0f, moveValue .y);
 
         GetComponent < Rigidbody >() . AddForce ( movement * speed * Time.fixedDeltaTime );
+
+        velocity = ((transform.position - lastpos).magnitude / Time.deltaTime);
+        lastpos = transform.position;
+
+        playerpos.text = "Position: "+lastpos;
+        playervel.text = "Velocity: "+velocity;
     }
 
     void OnTriggerEnter(Collider other) {
