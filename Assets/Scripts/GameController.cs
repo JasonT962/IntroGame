@@ -136,9 +136,24 @@ public class GameController : MonoBehaviour
 
     void VisionMode()
     {
-        Vector3 velocity = GameObject.Find("Player").GetComponent<Rigidbody>().velocity;
+        Vector3 playervel = GameObject.Find("Player").GetComponent<Rigidbody>().velocity;
+        Vector3 playerdirection = playervel.normalized;
+        float closestangle = -2;
+        GameObject currentclosest = null;
+        foreach (GameObject pickup in pickups)
+        {
+            pickup.GetComponent<Renderer>().material.color = Color.white;
+            Vector3 pickupdirection = (pickup.transform.position - player.transform.position).normalized;
+            if (Vector3.Dot(playerdirection,pickupdirection) > closestangle)
+            {
+                closestangle = Vector3.Dot(playerdirection, pickupdirection);
+                currentclosest = pickup;
+            }
+        }
+        currentclosest.GetComponent<Renderer>().material.color = Color.green;
+        currentclosest.transform.LookAt(player.transform.position);
         lineRenderer.SetPosition(0, player.transform.position);
-        lineRenderer.SetPosition(1, player.transform.position + velocity);
+        lineRenderer.SetPosition(1, player.transform.position + playervel);
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
     }
