@@ -500,6 +500,7 @@ MonoBehaviour:
   winText: {fileID: 156740670}
   playerpos: {fileID: 958407044}
   playervel: {fileID: 1821318789}
+  velocity: 0
 --- !u!54 &462291265
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -900,7 +901,7 @@ GameObject:
   - component: {fileID: 958407044}
   m_Layer: 5
   m_Name: PlayerPosition
-  m_TagString: Untagged
+  m_TagString: Debug
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1365,7 +1366,7 @@ GameObject:
   - component: {fileID: 1462486271}
   m_Layer: 5
   m_Name: ClosestDistance
-  m_TagString: Untagged
+  m_TagString: Debug
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1738,7 +1739,7 @@ GameObject:
   - component: {fileID: 1821318789}
   m_Layer: 5
   m_Name: PlayerVelocity
-  m_TagString: Untagged
+  m_TagString: Debug
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

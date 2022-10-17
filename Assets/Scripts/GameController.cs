@@ -9,6 +9,15 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI closestText;
     private GameObject[] pickups;
     private LineRenderer lineRenderer;
+    GameObject[] debuginfo;
+    private enum Mode
+    {
+        Normal,
+        Distance,
+        Vision
+    };
+
+    private Mode mode;
 
     // Start is called before the first frame update
     void Start()
@@ -16,12 +25,19 @@ public class GameController : MonoBehaviour
         closestText.text = "";
         pickups = GameObject.FindGameObjectsWithTag("PickUp");
         lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.enabled = false;
+        mode = Mode.Normal;
+        debuginfo = GameObject.FindGameObjectsWithTag("Debug");
+        foreach (GameObject item in debuginfo)
+        {
+            item.SetActive(false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateClosest();
+        ModeHandler();
     }
 
     float DistanceFromPlayer(GameObject obj) {
@@ -31,7 +47,7 @@ public class GameController : MonoBehaviour
         return distance;
     }
 
-    void UpdateClosest() 
+    void DistanceMode() 
     {
         GameObject closest = FindClosestPickUp();
         if (closest != null) {
@@ -51,6 +67,10 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            lineRenderer.enabled = false;
+        }
     }
 
     GameObject FindClosestPickUp()
@@ -67,5 +87,59 @@ public class GameController : MonoBehaviour
             } 
         }
         return closest;
+    }
+
+    void ModeHandler()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (mode == Mode.Normal)
+            {
+                mode = Mode.Distance;
+                foreach (GameObject item in debuginfo)
+                {
+                    item.SetActive(true);
+                };
+                lineRenderer.enabled = true;
+            }
+            else if (mode == Mode.Distance)
+            {
+                mode = Mode.Vision;
+                foreach (GameObject pickup in pickups)
+                {
+                    pickup.GetComponent<Renderer>().material.color = Color.white;
+                }
+            }
+            else
+            {
+                mode = Mode.Normal;
+                lineRenderer.enabled = false;
+                foreach (GameObject item in debuginfo)
+                {
+                    item.SetActive(false);
+                };
+            }
+        }
+
+        switch (mode)
+        {
+            case Mode.Normal:
+                break;
+            case Mode.Distance:
+                DistanceMode();
+                break;
+            case Mode.Vision:
+                VisionMode();
+                break;
+        }
+    }
+
+    void VisionMode()
+    {
+        Vector3 velocity = GameObject.Find("Player").GetComponent<Rigidbody>().velocity;
+        lineRenderer.SetPosition(0, player.transform.position);
+        lineRenderer.SetPosition(1, player.transform.position + velocity);
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
     }
 }

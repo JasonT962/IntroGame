@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
     public TextMeshProUGUI playerpos;
     public TextMeshProUGUI playervel;
     private Vector3 lastpos;
-    private float velocity;
+    public float velocity;
 
     void Start() {
         count = 0;
