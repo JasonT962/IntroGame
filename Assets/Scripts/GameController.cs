@@ -138,20 +138,30 @@ public class GameController : MonoBehaviour
     {
         Vector3 playervel = GameObject.Find("Player").GetComponent<Rigidbody>().velocity;
         Vector3 playerdirection = playervel.normalized;
-        float closestangle = -2;
+        float closestangle = 0;
         GameObject currentclosest = null;
         foreach (GameObject pickup in pickups)
         {
-            pickup.GetComponent<Renderer>().material.color = Color.white;
-            Vector3 pickupdirection = (pickup.transform.position - player.transform.position).normalized;
-            if (Vector3.Dot(playerdirection,pickupdirection) > closestangle)
+            if (pickup.activeSelf)
             {
-                closestangle = Vector3.Dot(playerdirection, pickupdirection);
-                currentclosest = pickup;
+                pickup.GetComponent<Renderer>().material.color = Color.white;
+                Vector3 pickupdirection = (pickup.transform.position - player.transform.position).normalized;
+                if (pickup == null)
+                {
+                    print("Yes");
+                }
+                if (Vector3.Dot(playerdirection, pickupdirection) > closestangle)
+                {
+                    closestangle = Vector3.Dot(playerdirection, pickupdirection);
+                    currentclosest = pickup;
+                }
             }
         }
-        currentclosest.GetComponent<Renderer>().material.color = Color.green;
-        currentclosest.transform.LookAt(player.transform.position);
+        if (currentclosest != null)
+        {
+            currentclosest.GetComponent<Renderer>().material.color = Color.green;
+            currentclosest.transform.LookAt(player.transform.position);
+        }
         lineRenderer.SetPosition(0, player.transform.position);
         lineRenderer.SetPosition(1, player.transform.position + playervel);
         lineRenderer.startWidth = 0.1f;
